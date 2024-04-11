@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import static com.batherphilippa.guitarvillage.exception.ErrorType.NOT_FOUND;
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
+import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 
 @Component
 public class GuitarHandler {
@@ -50,7 +51,7 @@ public class GuitarHandler {
         return guitarService.updateById(serverRequest.bodyToMono(Guitar.class))
                 .flatMap(g -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(fromObject(g)))
+                        .body(fromValue(g)))// from Object deprecated
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Guitar with id %s not found", guitarId))), ErrorResponse.class));
