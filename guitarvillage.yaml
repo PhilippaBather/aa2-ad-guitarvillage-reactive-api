@@ -1,0 +1,298 @@
+openapi: 3.0.1
+info:
+  title: Guitar Village API
+  description: API para una tienda de guitarras
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+tags:
+  - name: guitars
+    description: Operaciones para fetch, add, update, y delete guitarras
+paths:
+  /products/guitars:
+    get:
+      tags:
+        - guitars
+      operationId: getAllGuitars
+      summary: Devuelve una lista del repertorio de guitarras disponibles
+      description: Devuelve una lista del repertorio de guitarras disponibles.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GuitarDTOOut"
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+    post:
+      tags:
+        - guitars
+      operationId: saveGuitar
+      summary: Guarda un nuevo producto
+      description: Valida un objeto Guitar y crea un nuevo Guitar para guardar en el base de datos.
+      requestBody:
+        description: Un nuevo guitarra
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuitarDTOIn"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuitarDTOOut"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        400:
+          description: JSON Parse Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+  /products/guitars/{guitarId}:
+    get:
+      tags:
+        - guitars
+      operationId: getGuitarById
+      summary: Devuelve una guitarra por su única ID.
+      description: Devuelve una guitarra por su única ID.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuitarDTOOut"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+    put:
+      tags:
+        - guitars
+      operationId: updateGuitar
+      summary: Actualiza un producto existente.
+      description: Actualiza un producto existente.
+      parameters:
+        - name: guitarId
+          in: path variable
+          description: La ID de la guitarra
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Un objeto de una guitarra actualizado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuitarDTOIn"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuitarDTOOut"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+    delete:
+      tags:
+        - guitars
+      operationId: deleteGuitarById
+      summary: Elimina una guitara por su única ID.
+      description: Elimina una guitara por su única ID.
+      parameters:
+        - name: guitarId
+          in: path variable
+          description: La ID de la guitarra
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Product successfully deleted.
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+
+components:
+  schemas:
+    GuitarDTOIn:
+      type: object
+      properties:
+        product:
+          type: string
+          enum: [ACCESSORY, GUITAR, PEDAL]
+          example: GUITAR
+          description: El tipo de producto
+        make:
+          type: string
+          example: "Fender"
+          description: La marca de la guitarra
+        model:
+          type: string
+          example: "JA-90 Jim Adkins NA IL"
+          description: El nombre del modelo de la guitarra
+        serialNumber:
+          type: integer
+          format: int32
+          example: 4678623
+          description: Identifica el modelo de la guitarra
+        price:
+          type: number
+          format: currency
+          example: "1015"
+          description: El precio de la guitarra en euros
+        type:
+          type: string
+          enum: [ ACOUSTIC, CLASSICAL, ELECTRIC, FLAMENCO, SEMI_ACOUSTIC, TRAVEL ]
+          example: ELECTRIC
+        description:
+          type: string
+          example: "A Telecaster with Seymour Duncan Vintage P-90 pickups"
+          description: Una descripción del producto
+    GuitarDTOOut:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1A
+          description: La única ID de la guitarra en la base de datos
+      allOf:
+        - $ref: "#/components/schemas/GuitarDTOIn"
+    GenericErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 404
+          description: El código de estado de HTTP
+        errorType:
+          type: string
+          example: Product Not Found Error
+          description: Identifica el tipo de error.
+        message:
+          type: string
+          example: "Product not found with id: 55"
+          description: Una descripción del error
+    UnprocessableEntityResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "VALIDATION"
+          description: El tipo de error
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnprocessableEntity"
+    UnprocessableEntity:
+      type: object
+      properties:
+        constraint:
+          type: string
+          example: "Not Blank"
+          description: La restricción pendiente
+        detail:
+          type: string
+          example: "model: Model is required."
+          description: Detalles del error
+        mapping:
+          type: string
+          example: "guitarDTOIn/model"
+          description: Identifica el attributo que ha causado el error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
