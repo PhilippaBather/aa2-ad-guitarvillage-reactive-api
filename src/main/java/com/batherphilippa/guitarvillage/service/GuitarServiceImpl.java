@@ -45,7 +45,7 @@ public class GuitarServiceImpl implements GuitarService{
     }
 
     @Override
-    public void deleteById(String id) {
-        guitarRepo.deleteById(id);
+    public Mono<Void> deleteById(String id) {
+        return guitarRepo.deleteById(id);
     }
 }
