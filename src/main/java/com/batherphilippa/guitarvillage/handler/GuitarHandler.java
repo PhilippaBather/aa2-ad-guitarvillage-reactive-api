@@ -49,9 +49,10 @@ public class GuitarHandler {
     public Mono<ServerResponse> updateGuitarById(ServerRequest serverRequest) throws IllegalArgumentException {
         String guitarId = serverRequest.pathVariable("guitarId");
         return guitarService.updateById(serverRequest.bodyToMono(Guitar.class))
+                // TODO: add doOnNext and validate the object received
                 .flatMap(g -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(fromValue(g)))// from Object deprecated
+                        .body(fromValue(g))) // from Object deprecated
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Guitar with id %s not found", guitarId))), ErrorResponse.class));
