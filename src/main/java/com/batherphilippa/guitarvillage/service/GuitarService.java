@@ -10,6 +10,6 @@ public interface GuitarService {
     Mono<Guitar> findById(String id);
     Mono<Guitar> save(Guitar guitar);
     Mono<Guitar> updateById(Mono<Guitar> guitar);
-    void deleteById(String id);
+    Mono<Void> deleteById(String id);
 
 }
