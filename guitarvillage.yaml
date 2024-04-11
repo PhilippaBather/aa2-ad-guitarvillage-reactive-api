@@ -235,9 +235,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 1
+          type: string
+          example: 1A
           description: La única ID de la guitarra en la base de datos
       allOf:
         - $ref: "#/components/schemas/GuitarDTOIn"
