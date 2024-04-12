@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
@@ -12,11 +11,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("guitar")
-public class Guitar {
-
-    @Id
-    private String id;
+public class GuitarDTOIn {
+    
     @Field
     private ProductType product;
     @Field
@@ -33,6 +29,5 @@ public class Guitar {
     private InstrumentType type;
     @Field
     private String description;
-
 
 }
