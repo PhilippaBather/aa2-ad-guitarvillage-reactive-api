@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "28e2a1a4-27d1-461a-8b2e-7e92b7ca1191",
+		"name": "guitarvillage-reactive-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20376387"
+	},
+	"item": [
+		{
+			"name": "getAllGuitars",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}{{base_url}}",
+					"host": [
+						"{{host}}{{port}}{{base_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getGuitarById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}{{base_url}}/66191941fb67286d9174d759",
+					"host": [
+						"{{host}}{{port}}{{base_url}}"
+					],
+					"path": [
+						"66191941fb67286d9174d759"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteGuitarById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{port}}{{base_url}}/66191419a9cef13fda7d157f",
+					"host": [
+						"{{host}}{{port}}{{base_url}}"
+					],
+					"path": [
+						"66191419a9cef13fda7d157f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postGuitar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"product\": \"GUITAR\",\r\n  \"make\": \"Fender\",\r\n  \"model\": \"JA-90 Jim Adkins NA IL\",\r\n  \"colour\": \"natural wood\",\r\n  \"serialNumber\": \"4678623\",\r\n  \"price\": \"1015.00\",\r\n  \"type\": \"ELECTRIC\",  \r\n  \"description\": \"A Telecaster with Seymour Duncan Vintage P-90 pickups\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}{{base_url}}",
+					"host": [
+						"{{host}}{{port}}{{base_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateGuitarById",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\" : \"6619230b95106a69c7c1c89c\",\r\n  \"product\": \"GUITAR\",\r\n  \"make\": \"Fender\",\r\n  \"model\": \"Vintera 60's Strat\",\r\n  \"colour\": \"surf green\",\r\n  \"serialNumber\": \"4678dfdf23\",\r\n  \"price\": \"969.00\",\r\n  \"type\": \"ELECTRIC\",  \r\n  \"description\": \"A classic 60s strat in retro surf green\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{port}}{{base_url}}/6619230b95106a69c7c1c89c",
+					"host": [
+						"{{host}}{{port}}{{base_url}}"
+					],
+					"path": [
+						"6619230b95106a69c7c1c89c"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
