@@ -102,7 +102,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorResponse"
         404:
-          description: Product not found.
+          description: ProductType not found.
           content:
             application/json:
               schema:
@@ -148,7 +148,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorResponse"
         404:
-          description: Product not found.
+          description: ProductType not found.
           content:
             application/json:
               schema:
@@ -181,9 +181,9 @@ paths:
             format: int64
       responses:
         204:
-          description: Product successfully deleted.
+          description: ProductType successfully deleted.
         404:
-          description: Product not found.
+          description: ProductType not found.
           content:
             application/json:
               schema:
@@ -213,6 +213,10 @@ components:
           type: string
           example: "JA-90 Jim Adkins NA IL"
           description: El nombre del modelo de la guitarra
+        color:
+          type: string
+          example: "natural wood"
+          description: El color de la guitarra
         serialNumber:
           type: integer
           format: int32
@@ -221,7 +225,7 @@ components:
         price:
           type: number
           format: currency
-          example: "1015"
+          example: "1015.00"
           description: El precio de la guitarra en euros
         type:
           type: string
@@ -249,11 +253,11 @@ components:
           description: El código de estado de HTTP
         errorType:
           type: string
-          example: Product Not Found Error
+          example: ProductType Not Found Error
           description: Identifica el tipo de error.
         message:
           type: string
-          example: "Product not found with id: 55"
+          example: "ProductType not found with id: 55"
           description: Una descripción del error
     UnprocessableEntityResponse:
       type: object
