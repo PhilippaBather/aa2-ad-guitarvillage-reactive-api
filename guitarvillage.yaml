@@ -24,7 +24,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/GuitarDTOOut"
+                  $ref: "#/components/schemas/Guitar"
         '401':
           description: Unauthorised
           content:
@@ -36,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericErrorResponse"
+                $ref: "#/components/schemas/InternalServerError"
     post:
       tags:
         - guitars
@@ -56,7 +56,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GuitarDTOOut"
+                $ref: "#/components/schemas/Guitar"
         401:
           description: Unauthorised
           content:
@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericErrorResponse"
+                $ref: "#/components/schemas/InternalServerError"
   /products/guitars/{guitarId}:
     get:
       tags:
@@ -94,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GuitarDTOOut"
+                $ref: "#/components/schemas/Guitar"
         401:
           description: Unauthorised
           content:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericErrorResponse"
+                $ref: "#/components/schemas/InternalServerError"
     put:
       tags:
         - guitars
@@ -140,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GuitarDTOOut"
+                $ref: "#/components/schemas/Guitar"
         401:
           description: Unauthorised
           content:
@@ -164,7 +164,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericErrorResponse"
+                $ref: "#/components/schemas/InternalServerError"
     delete:
       tags:
         - guitars
@@ -193,7 +193,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GenericErrorResponse"
+                $ref: "#/components/schemas/InternalServerError"
 
 components:
   schemas:
@@ -235,7 +235,7 @@ components:
           type: string
           example: "A Telecaster with Seymour Duncan Vintage P-90 pickups"
           description: Una descripción del producto
-    GuitarDTOOut:
+    Guitar:
       type: object
       properties:
         id:
@@ -259,6 +259,33 @@ components:
           type: string
           example: "ProductType not found with id: 55"
           description: Una descripción del error
+    InternalServerError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: "2024-04-12T10:54:48.558+00:00"
+          description: El tiempo el error ocurrió.
+        path:
+          type: string
+          example: "/products/guitars"
+          description: El path dónde el error ocurrió.
+        status:
+          type: string
+          example: 500,
+          description: El estado HTTP
+        error:
+          type: string
+          example: Internal Server Error
+          description: La descripción del estado del error
+        message:
+          type: string
+          example: "Invalid property 'instrumentType'"
+          description: La descripción del error
+        requestId:
+          type: string
+          example: "dd85cf3-2"
+          description: El identificador de la petición
     UnprocessableEntityResponse:
       type: object
       properties:

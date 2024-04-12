@@ -1,6 +1,7 @@
 package com.batherphilippa.guitarvillage.service;
 
 import com.batherphilippa.guitarvillage.domain.Guitar;
+import com.batherphilippa.guitarvillage.domain.GuitarDTOIn;
 import com.batherphilippa.guitarvillage.respository.GuitarRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -31,8 +32,8 @@ public class GuitarServiceImpl implements GuitarService{
     }
 
     @Override
-    public Mono<Guitar> updateById(Mono<Guitar> guitar) {
-        return guitar.flatMap(g -> guitarRepo.findById(g.getId())
+    public Mono<Guitar> updateById(Mono<GuitarDTOIn> guitar, String id) {
+        return guitar.flatMap(g -> guitarRepo.findById(id)
                 .flatMap((g1) -> {
                     g1.setProduct(g.getProduct());
                     g1.setMake(g.getMake());
