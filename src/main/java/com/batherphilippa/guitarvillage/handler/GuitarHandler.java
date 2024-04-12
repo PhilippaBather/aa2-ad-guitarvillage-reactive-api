@@ -1,6 +1,7 @@
 package com.batherphilippa.guitarvillage.handler;
 
 import com.batherphilippa.guitarvillage.domain.Guitar;
+import com.batherphilippa.guitarvillage.domain.GuitarDTOIn;
 import com.batherphilippa.guitarvillage.exception.ErrorResponse;
 import com.batherphilippa.guitarvillage.service.GuitarService;
 import com.batherphilippa.guitarvillage.validation.GuitarValidator;
@@ -57,7 +58,7 @@ public class GuitarHandler {
 
     public Mono<ServerResponse> updateGuitarById(ServerRequest serverRequest) throws IllegalArgumentException {
         String guitarId = serverRequest.pathVariable("guitarId");
-        return guitarService.updateById(serverRequest.bodyToMono(Guitar.class))
+        return guitarService.updateById(serverRequest.bodyToMono(GuitarDTOIn.class), guitarId)
                 .doOnNext(this::validate)
                 .flatMap(g -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +70,6 @@ public class GuitarHandler {
 
     public Mono<ServerResponse> deleteGuitarById(ServerRequest serverRequest) {
         String guitarId = serverRequest.pathVariable("guitarId");
-        Mono<Guitar> retrievedGuitar = guitarService.findById(guitarId);
         return guitarService.findById(guitarId)
                 .flatMap(g -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
