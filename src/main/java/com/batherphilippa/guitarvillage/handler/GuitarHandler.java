@@ -69,8 +69,14 @@ public class GuitarHandler {
 
     public Mono<ServerResponse> deleteGuitarById(ServerRequest serverRequest) {
         String guitarId = serverRequest.pathVariable("guitarId");
-        return guitarService.deleteById(guitarId)
-                .flatMap(g -> ServerResponse.noContent().build());
+        Mono<Guitar> retrievedGuitar = guitarService.findById(guitarId);
+        return guitarService.findById(guitarId)
+                .flatMap(g -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(guitarService.deleteById(g.getId()), ServerResponse.noContent().build().getClass()))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Guitar with id %s not found", guitarId))), ErrorResponse.class));
     }
 
     private void validate(Guitar guitar) {
