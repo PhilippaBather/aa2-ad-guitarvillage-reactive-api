@@ -18,15 +18,19 @@ public class Guitar {
     @Id
     private String id;
     @Field
+    private ProductType product;
+    @Field
     private String make;
     @Field
     private String model;
+    @Field
+    private String colour;
     @Field
     private String serialNumber;
     @Field
     private BigDecimal price;
     @Field
-    private InstrumentType instrumentType;
+    private InstrumentType type;
     @Field
     private String description;
 
