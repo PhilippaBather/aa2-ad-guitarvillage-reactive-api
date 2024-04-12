@@ -18,6 +18,7 @@ public class GuitarValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "product", FIELD_REQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "make", FIELD_REQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "model", FIELD_REQUIRED);
 
@@ -27,6 +28,6 @@ public class GuitarValidator implements Validator {
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", FIELD_REQUIRED);
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "instrumentType", FIELD_REQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", FIELD_REQUIRED);
     }
 }

@@ -34,11 +34,12 @@ public class GuitarServiceImpl implements GuitarService{
     public Mono<Guitar> updateById(Mono<Guitar> guitar) {
         return guitar.flatMap(g -> guitarRepo.findById(g.getId())
                 .flatMap((g1) -> {
+                    g1.setProduct(g.getProduct());
                     g1.setMake(g.getMake());
                     g1.setModel(g.getModel());
                     g1.setSerialNumber(g.getSerialNumber());
                     g1.setPrice(g.getPrice());
-                    g1.setInstrumentType(g.getInstrumentType());
+                    g1.setType(g.getType());
                     g1.setDescription(g.getDescription());
                     return guitarRepo.save(g1);
                 }));
