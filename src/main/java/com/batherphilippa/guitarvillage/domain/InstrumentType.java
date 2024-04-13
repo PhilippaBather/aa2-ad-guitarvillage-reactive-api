@@ -2,10 +2,10 @@ package com.batherphilippa.guitarvillage.domain;
 
 public enum InstrumentType {
 
-    ACCOUSTIC,
+    ACOUSTIC,
     CLASSICAL,
     ELECTRIC,
     FLAMENCO,
-    SEMI_ACCOUSTIC,
+    SEMI_ACOUSTIC,
     TRAVEL
 }
