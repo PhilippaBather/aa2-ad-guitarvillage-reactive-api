@@ -38,6 +38,7 @@ public class GuitarServiceImpl implements GuitarService{
                     g1.setProduct(g.getProduct());
                     g1.setMake(g.getMake());
                     g1.setModel(g.getModel());
+                    g1.setColour(g.getColour());
                     g1.setSerialNumber(g.getSerialNumber());
                     g1.setPrice(g.getPrice());
                     g1.setType(g.getType());
