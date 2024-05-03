@@ -11,5 +11,5 @@ public interface CustomerService {
     Mono<Customer> findById(String id);
     Mono<Customer> save(Customer customer);
     Mono<Customer> updateById(Mono<CustomerDTOIn> customer, String id);
-    Mono<Customer> deleteById(String id);
+    Mono<Void> deleteById(String id);
 }
