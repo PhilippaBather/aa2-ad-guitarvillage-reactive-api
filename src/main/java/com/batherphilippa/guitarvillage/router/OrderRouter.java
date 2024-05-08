@@ -14,12 +14,16 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class OrderRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> guitarsRoute(OrderHandler orderHandler) {
+    public RouterFunction<ServerResponse> ordersRoute(OrderHandler orderHandler) {
         return RouterFunctions
                 .route(GET("/orders").and(accept(MediaType.APPLICATION_JSON)), orderHandler::getAllOrders)
                 .andRoute(POST("/orders").and(accept(MediaType.APPLICATION_JSON)), orderHandler::createOrder)
                 .andRoute(GET("/orders/{orderId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::getOrderById)
                 .andRoute(PUT("/orders/{orderId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::updateOrderById)
-                .andRoute(DELETE("/orders/{orderId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::deleteOrderById);
+                .andRoute(DELETE("/orders/{orderId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::deleteOrderById)
+                .andRoute(GET("orders/customer/{customerId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::getOrdersByCustomerId)
+                .andRoute(DELETE("orders/customer/{customerId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::deleteOrdersByCustomerId)
+                .andRoute(GET("orders/product/{productId}").and(accept(MediaType.APPLICATION_JSON)), orderHandler::getOrdersByProductId);
+
     }
 }
