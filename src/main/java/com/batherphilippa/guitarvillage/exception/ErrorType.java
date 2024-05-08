@@ -2,7 +2,7 @@ package com.batherphilippa.guitarvillage.exception;
 
 public enum ErrorType {
 
-    NOT_FOUND(404, "PRODUCT NOT FOUND");
+    NOT_FOUND(404, "NOT FOUND");
 
     private int code;
     private String msg;
