@@ -20,7 +20,7 @@ public class OrderValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", FIELD_REQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "creationDate", FIELD_REQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "customerId", FIELD_REQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "productId", FIELD_REQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "quantity", FIELD_REQUIRED);
@@ -34,5 +34,6 @@ public class OrderValidator implements Validator {
         if (o.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             errors.rejectValue("price", NEGATIVE_VALUE);
         }
+
     }
 }
