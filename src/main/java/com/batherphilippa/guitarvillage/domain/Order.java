@@ -8,22 +8,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("customer")
-public class Customer implements Serializable {
+@Document("order")
+public class Order implements Serializable {
 
     @Id
     private String id;
     @Field
-    private String forename;
+    private LocalDateTime creationDate;
     @Field
-    private String surname;
+    private String customerId;
     @Field
-    private String email;
+    private String productId;
     @Field
-    private String tel;
+    private BigDecimal price;   // price as sold will not always reflect that bound to the product in the db
+    @Field
+    private int quantity;
 
 }

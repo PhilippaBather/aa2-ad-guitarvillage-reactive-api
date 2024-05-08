@@ -14,7 +14,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class CustomerRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> guitarsRoute(CustomerHandler customerHandler) {
+    public RouterFunction<ServerResponse> customersRoute(CustomerHandler customerHandler) {
         return RouterFunctions
                 .route(GET("/customers").and(accept(MediaType.APPLICATION_JSON)), customerHandler::getAllCustomers)
                 .andRoute(POST("/customers").and(accept(MediaType.APPLICATION_JSON)), customerHandler::createCustomer)
