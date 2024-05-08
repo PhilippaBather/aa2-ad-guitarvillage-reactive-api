@@ -7,11 +7,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("customer")
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     private String id;
@@ -24,5 +26,4 @@ public class Customer {
     @Field
     private String tel;
 
-    // TODO: orders
 }
