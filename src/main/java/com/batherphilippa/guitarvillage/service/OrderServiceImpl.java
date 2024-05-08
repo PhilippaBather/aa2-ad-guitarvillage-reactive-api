@@ -35,10 +35,11 @@ public class OrderServiceImpl implements OrderService {
     public Mono<Order> updateById(Mono<OrderDTOIn> order, String id) {
         return order.flatMap(o -> orderRepo.findById(id)
                 .flatMap((o1) -> {
-                    o1.setDate(o.getDate());
+                    o1.setCreationDate(o.getCreationDate());
                     o1.setCustomerId(o.getCustomerId());
                     o1.setProductId(o.getProductId());
                     o1.setQuantity(o.getQuantity());
+                    o1.setPrice(o.getPrice());
                     return orderRepo.save(o1);
                 }));
     }
@@ -46,5 +47,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<Void> deleteById(String id) {
         return orderRepo.deleteById(id);
+    }
+
+    @Override
+    public Flux<Order> findByCustomerId(String customerId) {
+        return orderRepo.findByCustomerId(customerId);
+    }
+
+    @Override
+    public Mono<Void> deleteByCustomerId(String customerId) {
+        return orderRepo.deleteByCustomerId(customerId);
+    }
+
+    @Override
+    public Flux<Order> findByProductId(String productId) {
+        return orderRepo.findByProductId(productId);
     }
 }

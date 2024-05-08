@@ -12,4 +12,8 @@ public interface OrderService {
     Mono<Order> save(Order order);
     Mono<Order> updateById(Mono<OrderDTOIn> order, String id);
     Mono<Void> deleteById(String id);
+
+    Flux<Order> findByCustomerId(String customerId);
+    Mono<Void> deleteByCustomerId(String customerId);
+    Flux<Order> findByProductId(String productId);
 }
