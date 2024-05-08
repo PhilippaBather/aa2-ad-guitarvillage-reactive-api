@@ -1,7 +1,5 @@
 package com.batherphilippa.guitarvillage.handler;
 
-import com.batherphilippa.guitarvillage.domain.Customer;
-import com.batherphilippa.guitarvillage.domain.CustomerDTOIn;
 import com.batherphilippa.guitarvillage.domain.Order;
 import com.batherphilippa.guitarvillage.domain.OrderDTOIn;
 import com.batherphilippa.guitarvillage.exception.ErrorResponse;
@@ -25,18 +23,31 @@ import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 public class OrderHandler {
 
     private final OrderService orderService;
-
-    private final Validator validator;
+    private final Validator validatorOrder;
 
     public OrderHandler(OrderService orderService) {
         this.orderService = orderService;
-        this.validator = new OrderValidator();
+        this.validatorOrder = new OrderValidator();
     }
 
     public Mono<ServerResponse> getAllOrders(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.findAll(), Order.class);
+    }
+
+    public Mono<ServerResponse> getOrdersByCustomerId(ServerRequest serverRequest) {
+        String customerId = serverRequest.pathVariable("customerId");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderService.findByCustomerId(customerId), Order.class);
+    }
+
+    public Mono<ServerResponse> getOrdersByProductId(ServerRequest serverRequest) {
+        String productId = serverRequest.pathVariable("productId");
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderService.findByProductId(productId), Order.class);
     }
 
     public Mono<ServerResponse> createOrder(ServerRequest serverRequest) {
@@ -46,14 +57,27 @@ public class OrderHandler {
         return newOrder.flatMap(order -> ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(orderService.save(order), Order.class));
+
+
+//        String customerId = serverRequest.pathVariable("customerId");
+//        String productId = serverRequest.pathVariable("productId");
+//
+//        Mono<Order> map = Mono.zip(newOrder, customerRepo.findById(customerId), guitarRepo.findById(productId))
+//                .map(zipMono -> new Order(zipMono.getT1().getCreationDate(), zipMono.getT2(), zipMono.getT3(), zipMono.getT1().getPrice(), zipMono.getT1().getQuantity())).next();
+//
+//        map.subscribe(orderService::save);
+
+//        return map.flatMap(order -> ServerResponse.status(HttpStatus.CREATED)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(Flux.just(newOrder), OrderDTOIn.class));
     }
 
     public Mono<ServerResponse> getOrderById(ServerRequest serverRequest) {
         String orderId = serverRequest.pathVariable("orderId");
         return orderService.findById(orderId)
-                .flatMap(g -> ServerResponse.ok()
+                .flatMap(o -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(Mono.just(g), Order.class))
+                        .body(Mono.just(o), Order.class))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Order with id %s not found", orderId))), ErrorResponse.class));
@@ -64,9 +88,9 @@ public class OrderHandler {
         String orderId = serverRequest.pathVariable("orderId");
         return orderService.updateById(serverRequest.bodyToMono(OrderDTOIn.class), orderId)
                 .doOnNext(this::validate)
-                .flatMap(g -> ServerResponse.ok()
+                .flatMap(o -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(fromValue(g))) // from Object deprecated
+                        .body(fromValue(o))) // from Object deprecated
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Order with id %s not found", orderId))), ErrorResponse.class));
@@ -83,12 +107,21 @@ public class OrderHandler {
                         .body(Mono.just(new ErrorResponse(NOT_FOUND.getCode(), NOT_FOUND.getMsg(), String.format("Order with id %s not found", orderId))), ErrorResponse.class));
     }
 
+    public Mono<ServerResponse> deleteOrdersByCustomerId(ServerRequest serverRequest) {
+        String customerId = serverRequest.pathVariable("customerId");
+        return orderService.deleteByCustomerId(customerId)
+                .then(ServerResponse.ok().build())
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
+
     private void validate(Order order) {
         Errors errors = new BeanPropertyBindingResult(order, "order");
-        validator.validate(order, errors);
+        validatorOrder.validate(order, errors);
         if (errors.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     errors.getAllErrors().toString());
         }
     }
+
 }
