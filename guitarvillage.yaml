@@ -8,6 +8,10 @@ servers:
 tags:
   - name: guitars
     description: Operaciones para fetch, add, update, y delete guitarras
+  - name: customers
+    description: Clientes
+  - name: orders
+    description: Los pedidos correspondiente a un cliente
 paths:
   /products/guitars:
     get:
@@ -69,12 +73,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericErrorResponse"
-        422:
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnprocessableEntityResponse"
         500:
           description: Internal Server Error
           content:
@@ -88,6 +86,13 @@ paths:
       operationId: getGuitarById
       summary: Devuelve una guitarra por su única ID.
       description: Devuelve una guitarra por su única ID.
+      parameters:
+        - name: guitarId
+          in: path variable
+          description: La ID de la guitarra
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -125,8 +130,7 @@ paths:
           description: La ID de la guitarra
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       requestBody:
         description: Un objeto de una guitarra actualizado
         required: true
@@ -153,12 +157,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericErrorResponse"
-        422:
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnprocessableEntityResponse"
         500:
           description: Internal Server Error
           content:
@@ -177,13 +175,472 @@ paths:
           description: La ID de la guitarra
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         204:
           description: ProductType successfully deleted.
         404:
           description: ProductType not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /customers:
+    get:
+      tags:
+        - customers
+      operationId: getAllCustomers
+      summary: Devuelve una lista del repertorio de clientes
+      description: Devuelve una lista del repertorio de clientes.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    post:
+      tags:
+        - customers
+      operationId: saveCustomer
+      summary: Guarda un nuevo cliente
+      description: Valida un objeto Cliente y crea un nuevo Cliente para guardar en el base de datos.
+      requestBody:
+        description: Un nuevo cliente
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDTOIn"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /customers/{customerId}:
+    get:
+      tags:
+        - customers
+      operationId: getCustomerById
+      summary: Devuelve una customer por su única ID.
+      description: Devuelve una customer por su única ID.
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: ProductType not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    put:
+      tags:
+        - customers
+      operationId: updateCustomer
+      summary: Actualiza un cliente existente.
+      description: Actualiza un cliente existente.
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Un objeto de una cliente actualizado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDTOIn"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: ProductType not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      tags:
+        - customers
+      operationId: deleteCustomerById
+      summary: Elimina un cliente por su única ID.
+      description: Elimina un cliente por su única ID.
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Customer successfully deleted.
+        404:
+          description: Customer not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+
+  /orders:
+    get:
+      tags:
+        - orders
+      operationId: getAllOrders
+      summary: Devuelve una lista del repertorio de pedidos
+      description: Devuelve una lista del repertorio de pedidos.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    post:
+      tags:
+        - orders
+      operationId: saveOrder
+      summary: Guarda un nuevo pedido
+      description: Valida un objeto Order y crea un nuevo Order para guardar en el base de datos.
+      requestBody:
+        description: Un nuevo pedido
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /orders/{orderId}:
+    get:
+      tags:
+        - orders
+      operationId: getOrderById
+      summary: Devuelve un pedido por su única ID.
+      description: Devuelve un pedido por su única ID.
+      parameters:
+        - name: orderId
+          in: path variable
+          description: La ID del pedido
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    put:
+      tags:
+        - orders
+      operationId: updateOrder
+      summary: Actualiza un pedido existente.
+      description: Actualiza un pedido existente.
+      parameters:
+        - name: orderId
+          in: path variable
+          description: La ID del pedido
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Un objeto de un pedido actualizado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderDTOIn"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - orders
+      operationId: deleteOrderById
+      summary: Elimina un pedido por su única ID.
+      description: Elimina un pedido por su única ID.
+      parameters:
+        - name: orderId
+          in: path variable
+          description: La ID del pedido
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Order successfully deleted.
+        404:
+          description: ORder not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /orders/customer/{customerId}:
+    get:
+      tags:
+        - orders
+      operationId: getOrderByCustomerId
+      summary: Devuelve un pedido por la ID del cliente.
+      description: Devuelve un pedido por la ID del cliente
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    put:
+      tags:
+        - orders
+      operationId: updateOrder
+      summary: Actualiza un pedido existente por la ID del cliente.
+      description: Actualiza un pedido existente por la ID del cliente.
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Un objeto de un pedido actualizado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderDTOIn"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        404:
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - orders
+      operationId: deleteOrderById
+      summary: Elimina un pedido por la ID del cliente
+      description: Elimina un pedido por la ID del cliente.
+      parameters:
+        - name: customerId
+          in: path variable
+          description: La ID del cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Order successfully deleted.
+        404:
+          description: ORder not found.
           content:
             application/json:
               schema:
@@ -244,6 +701,68 @@ components:
           description: La única ID de la guitarra en la base de datos
       allOf:
         - $ref: "#/components/schemas/GuitarDTOIn"
+    CustomerDTOIn:
+      type: object
+      properties:
+        forename:
+          type: string
+          example: "Matt"
+          description: El nombre del cliente
+        surname:
+          type: string
+          example: "Jackson"
+          description: El apellido del cliente
+        email:
+          type: string
+          example: "mat@gmail.com"
+          description: El correo electrónico del cliente
+        tel:
+          type: string
+          example: "0123749234"
+          description: El número del teléfono del cliente
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1A
+          description: La única ID de la guitarra en la base de datos
+      allOf:
+        - $ref: "#/components/schemas/CustomerDTOIn"
+    OrderDTOIn:
+      type: object
+      properties:
+        creationDate:
+          type: date
+          example: "20-11-2023"
+          description: La fecha del pedido.
+        customerId:
+          type: string
+          example: "1A"
+          description: La única ID del cliente
+        productId:
+          type: string
+          example: "JKF788fdf"
+          description: La única ID del producto
+        price:
+          type: number
+          format: currency
+          example: "789.99"
+          description: El precio del producto
+        quantity:
+          type: number
+          format: int32
+          example: 3
+          description: La cantidad del producto
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1A
+          description: La única ID del pedido en la base de datos
+      allOf:
+        - $ref: "#/components/schemas/OrderDTOIn"
     GenericErrorResponse:
       type: object
       properties:
@@ -251,10 +770,6 @@ components:
           type: string
           example: 404
           description: El código de estado de HTTP
-        errorType:
-          type: string
-          example: ProductType Not Found Error
-          description: Identifica el tipo de error.
         message:
           type: string
           example: "ProductType not found with id: 55"
@@ -286,32 +801,7 @@ components:
           type: string
           example: "dd85cf3-2"
           description: El identificador de la petición
-    UnprocessableEntityResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          example: "VALIDATION"
-          description: El tipo de error
-        errors:
-          type: array
-          items:
-            $ref: "#/components/schemas/UnprocessableEntity"
-    UnprocessableEntity:
-      type: object
-      properties:
-        constraint:
-          type: string
-          example: "Not Blank"
-          description: La restricción pendiente
-        detail:
-          type: string
-          example: "model: Model is required."
-          description: Detalles del error
-        mapping:
-          type: string
-          example: "guitarDTOIn/model"
-          description: Identifica el attributo que ha causado el error.
+
 
 
 

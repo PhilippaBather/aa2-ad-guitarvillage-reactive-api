@@ -7,27 +7,21 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GuitarDTOIn implements Serializable {
-    
-    @Field
-    private ProductType product;
-    @Field
-    private String make;
-    @Field
-    private String model;
-    @Field
-    private String colour;
-    @Field
-    private String serialNumber;
-    @Field
-    private BigDecimal price;
-    @Field
-    private InstrumentType type;
-    @Field
-    private String description;
+public class OrderDTOIn implements Serializable {
 
+    @Field
+    private LocalDateTime creationDate;
+    @Field
+    private String customerId;
+    @Field
+    private String productId;
+    @Field
+    private int quantity;
+    @Field
+    private BigDecimal price;      // price as sold will not always reflect that bound to the product in the db
 }

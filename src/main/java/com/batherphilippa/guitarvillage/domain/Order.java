@@ -9,31 +9,25 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("guitar")
-public class Guitar implements Serializable {
+@Document("order")
+public class Order implements Serializable {
 
     @Id
     private String id;
     @Field
-    private ProductType product;
+    private LocalDateTime creationDate;
     @Field
-    private String make;
+    private String customerId;
     @Field
-    private String model;
+    private String productId;
     @Field
-    private String colour;
+    private BigDecimal price;   // price as sold will not always reflect that bound to the product in the db
     @Field
-    private String serialNumber;
-    @Field
-    private BigDecimal price;
-    @Field
-    private InstrumentType type;
-    @Field
-    private String description;
-
+    private int quantity;
 
 }

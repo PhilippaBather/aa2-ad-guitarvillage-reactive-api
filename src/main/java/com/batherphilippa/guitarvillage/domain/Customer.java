@@ -8,32 +8,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("guitar")
-public class Guitar implements Serializable {
+@Document("customer")
+public class Customer implements Serializable {
 
     @Id
     private String id;
     @Field
-    private ProductType product;
+    private String forename;
     @Field
-    private String make;
+    private String surname;
     @Field
-    private String model;
+    private String email;
     @Field
-    private String colour;
-    @Field
-    private String serialNumber;
-    @Field
-    private BigDecimal price;
-    @Field
-    private InstrumentType type;
-    @Field
-    private String description;
-
+    private String tel;
 
 }
